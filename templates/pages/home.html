@@ -1,0 +1,14 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Upload an video to annotate</h1>
+</div>
+<p class="lead">
+<form  method=post enctype=multipart/form-data action="annotate">
+  <input type="file" name="video" accept="video/*">
+  <input type="submit" value=Upload>
+</form>
+</p>
+{% endblock %}

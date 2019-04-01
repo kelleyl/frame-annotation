@@ -2,10 +2,14 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Markup
 # from flask.ext.sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
+from tools import process_file, generate_image_html, annotations_to_mmif
+
+from werkzeug.utils import secure_filename
+
 from forms import *
 import os
 
@@ -15,6 +19,7 @@ import os
 
 app = Flask(__name__)
 app.config.from_object('config')
+app.config['UPLOAD_FOLDER'] = "temp/"
 #db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
@@ -43,7 +48,7 @@ def login_required(test):
 
 @app.route('/')
 def home():
-    return render_template('pages/placeholder.home.html')
+    return render_template('pages/home.html')
 
 
 @app.route('/about')
@@ -56,6 +61,22 @@ def login():
     form = LoginForm(request.form)
     return render_template('forms/login.html', form=form)
 
+@app.route('/annotate', methods=["GET","POST"])
+def annotate():
+    f = request.files['video']
+    f.save(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
+    image_path = process_file(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
+    image_list = generate_image_html(image_path)
+    return render_template('pages/annotate.html', image_list=Markup(image_list), filename=f.filename)
+
+@app.route('/mmifexport', methods=["GET","POST"])
+def mmif_export():
+    form = request.form
+    print (form)
+    print (request.__dict__)
+    mmif = annotations_to_mmif(form)
+    ### display a page to view and download the result mmif
+    return render_template("pages/download.html", mmif=mmif)
 
 @app.route('/register')
 def register():

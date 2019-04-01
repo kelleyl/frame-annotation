@@ -1,0 +1,11 @@
+README.md
+setup.py
+clams/__init__.py
+clams/restify/__init__.py
+clams/serialize/__init__.py
+clams/serve/__init__.py
+clams/vocab/__init__.py
+clams_python_sdk.egg-info/PKG-INFO
+clams_python_sdk.egg-info/SOURCES.txt
+clams_python_sdk.egg-info/dependency_links.txt
+clams_python_sdk.egg-info/top_level.txt

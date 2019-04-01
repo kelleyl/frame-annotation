@@ -1,0 +1,36 @@
+{% extends 'layouts/main.html' %}
+{% block content %}
+<style type="text/css">
+    .thumbnails li img{
+        width: 100px;
+    }
+</style>
+<body>
+    <form method=post id="annotations" enctype=multipart/form-data action="mmifexport">
+        <textarea name="video">{{ filename }}</textarea>
+        <select name="anno" id="selectImage" class="image-picker" multiple="multiple">
+            {{ image_list }}
+        </select>
+        <input type="submit">
+    </form>
+</body>
+<script src="/static/js/libs/jquery-1.11.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("select").imagepicker();
+
+    $("#selectImage").imagepicker({
+        hide_select: true
+    });
+
+    var $container = $('.image_picker_selector');
+    // initialize
+    $container.imagesLoaded(function () {
+        $container.masonry({
+            columnWidth: 30,
+            itemSelector: '.thumbnail'
+        });
+    });
+    });
+</script>
+{% endblock %}
